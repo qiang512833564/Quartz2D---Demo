@@ -19,19 +19,19 @@
     
     {
         // 背景
-        [self drawBackGroundInContext:ctx];
+        //[self drawBackGroundInContext:ctx];
         
         // 头发
-        [self drawHairInContext:ctx];
+        //[self drawHairInContext:ctx];
         
         // 身体
         [self drawBodyInContext:ctx];
         
         // 眼镜 + 眼睛
-        [self drawGlasses:ctx];
+        //[self drawGlasses:ctx];
         
         // 嘴
-        [self drawMouse:ctx];
+        //[self drawMouse:ctx];
     }
     
     
@@ -173,14 +173,14 @@
     CGFloat bodyRadius = 100;
     
     CGFloat bodyHeight = 200;
-    
+#if 0
 //    CGContextMoveToPoint(ctx, self.center.x - bodyRadius, maxHair + bodyRadius + bodyHeight);
     CGContextAddArc(ctx, self.center.x, maxHair + bodyRadius, bodyRadius, M_PI, 0, 0);
     CGContextAddArc(ctx, self.center.x, maxHair + bodyRadius + bodyHeight, bodyRadius, 0, M_PI, 0);
     CGContextClosePath(ctx);
     
     CGContextClip(ctx);
-    
+#endif
     
     
     
@@ -216,7 +216,18 @@
         //     kCGGradientDrawsBeforeStartLocation    开始位置之外的也画
         //     kCGGradientDrawsAfterEndLocation       结束位置之外的也画
 //            CGContextDrawLinearGradient(ctx, gradientRef, CGPointMake(0.0f, 0.0f), CGPointMake(320.0f, 460.0f), 0);
-        CGContextDrawRadialGradient(ctx, gradientRef, CGPointMake(self.center.x - 90, maxHair + bodyRadius), 5, CGPointMake(self.center.x - 60, maxHair + bodyRadius), 200, kCGGradientDrawsAfterEndLocation | kCGGradientDrawsBeforeStartLocation);
+#pragma mark --- CGContextDrawRadialGradient就是画一个颜色渐变图形，在这里可以把参数endRadius设置小于50的数，可以看出来效果
+#pragma mark --- startCenter 开始圆的圆心
+#pragma mark --- startRadius 开始圆的半径
+#pragma mark --- endCenter   结束圆的圆心
+#pragma mark --- endRadius   结束圆的半径
+#pragma mark --- 通常尽量保持startCenter与endCenter坐标相近,单单针对center.x来说:如果startCenter.x与endCenter.x相差较startRadius与endRadius大的时候,startCenter会偏离外圆（结束圆）,startCenter与endCenter连线交外圆的交点，向外startCenter.x与endCenter.x之差与startRadius与endRadius之差距离，做切线，向圆散射颜色渐变
+/*
+ 注意外圆的圆心相对于内圆的圆心就是散射的方向
+ 如果内圆的圆心在外圆内部的话，渐变的范围就是，外圆与内圆之间的内容
+ 如果内圆的圆心在外圆外部的话，渐变的范围就是，外圆圆心与内圆两条外切线之间形成的扇形内容
+ */
+        CGContextDrawRadialGradient(ctx, gradientRef, CGPointMake(self.center.x - 90, maxHair + bodyRadius), 5, CGPointMake(self.center.x - 190, maxHair + bodyRadius), 106, kCGGradientDrawsAfterEndLocation | kCGGradientDrawsBeforeStartLocation);//
         
         // 释放渐变对象
         CGGradientRelease(gradientRef);
