@@ -221,16 +221,23 @@
 #pragma mark --- startRadius 开始圆的半径
 #pragma mark --- endCenter   结束圆的圆心
 #pragma mark --- endRadius   结束圆的半径
-#pragma mark --- 通常尽量保持startCenter与endCenter坐标相近,单单针对center.x来说:如果startCenter.x与endCenter.x相差较startRadius与endRadius大的时候,startCenter会偏离外圆（结束圆）,startCenter与endCenter连线交外圆的交点，向外startCenter.x与endCenter.x之差与startRadius与endRadius之差距离，做切线，向圆散射颜色渐变
+#pragma mark --- 通常尽量保持startCenter与endCenter坐标相近,单单针对center.x来说:如果startCenter.x与endCenter.x相差较startRadius与endRadius大的时候,startCenter会偏离外圆（结束圆）,startCenter与endCenter连线交外圆的交点，向外startCenter.x与endCenter.x之差与startRadius与endRadius之差距离，做切线，向圆散射颜色渐变----也就是：小圆的圆心是否在大圆的圆内的两种情况（在圆内--即从小圆圆外大圆圆内渐变，反之则是在大圆于小圆圆心连线上做两圆的公切线，切线以内的大圆以外的范围渐变颜色）
 /*
  注意外圆的圆心相对于内圆的圆心就是散射的方向
  如果内圆的圆心在外圆内部的话，渐变的范围就是，外圆与内圆之间的内容
  如果内圆的圆心在外圆外部的话，渐变的范围就是，外圆圆心与内圆两条外切线之间形成的扇形内容
  */
-        CGContextDrawRadialGradient(ctx, gradientRef, CGPointMake(self.center.x - 90, maxHair + bodyRadius), 5, CGPointMake(self.center.x - 190, maxHair + bodyRadius), 106, kCGGradientDrawsAfterEndLocation | kCGGradientDrawsBeforeStartLocation);//
-        
-        // 释放渐变对象
+        CGContextDrawRadialGradient(ctx, gradientRef, CGPointMake(self.center.x-90, maxHair + bodyRadius), 5, CGPointMake(self.center.x - 190, maxHair + bodyRadius), 100, kCGGradientDrawsAfterEndLocation | kCGGradientDrawsBeforeStartLocation);//
         CGGradientRelease(gradientRef);
+#pragma mark --- 下面这个是自己添加的--用于标记圆心的位置的
+        CGContextAddEllipseInRect(ctx, CGRectMake(self.center.x-190, maxHair + bodyRadius, 5, 5)) ;
+        CGContextSetFillColorWithColor(ctx, [UIColor redColor].CGColor);
+        CGContextFillPath(ctx);
+        CGContextAddEllipseInRect(ctx, CGRectMake(self.center.x-90, maxHair + bodyRadius, 5, 5)) ;
+        CGContextSetFillColorWithColor(ctx, [UIColor redColor].CGColor);
+        CGContextFillPath(ctx);
+        // 释放渐变对象
+        
     }
     
     
